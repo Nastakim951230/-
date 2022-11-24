@@ -1,8 +1,24 @@
 #include <stdio.h>
 #include <windows.h>
 
-DWORD lpstrToDword(LPSTR s)
+LPSTR lpstrToDword(LPSTR s)
 {
+	char dataConvertToStruct[]=s;
+	char* pEnd;
+	float kv1;
+	kv1 = wcstof(dataConvertToStruct, &pEnd);
+	if (kv1 == 0)
+	{
+		LPWSTR s = L"Некорректно введены данные, попробуйте еще раз";
+	}
+	else
+	{
+		kv1 = kv1 * kv1;
+		char szTest[140];
+		sprintf(szTest, "%d", kv1);
+		LPWSTR s = &szTest;
+	}
+	return s;
 
 }
 int main()
@@ -11,7 +27,7 @@ int main()
 	while (TRUE)
 	{
 		HANDLE hNamedPipe;//объявляем дескриптор канала
-		LPSTR lpszPipeName = L"";//переменная, содержащая имя канала
+		LPSTR lpszPipeName = L"\\\\.\\pipe\\MyPipe";//переменная, содержащая имя канала
 		hNamedPipe = CreateNamedPipe(//создаем канал
 			lpszPipeName,//имя канала
 			PIPE_ACCESS_DUPLEX, //режим доступа к каналу (двухсторонний)
@@ -36,13 +52,11 @@ int main()
 			{
 				printf("\nКлиент пишет: ");
 				printf(buffer);
-				DWORD d;//переменная в которой будет храниться значение пердаваемого от клиента
-
+				LPSTR d;//переменная в которой будет храниться значение пердаваемого от клиента
+				d = lpstrToDword(buffer);
 				//конвертирует из DWORD в LPWSTR
-				char szTest[140];
-				sprintf(szTest, "%d", d);
-				LPWSTR s = &szTest;
-				buffer = &s;//строковая переменная, значение которой записывается в канал
+				
+				buffer = &d;//строковая переменная, значение которой записывается в канал
 				WriteFile(hNamedPipe, buffer, size_buffer, &actual_readen, NULL);
 			}
 		}
