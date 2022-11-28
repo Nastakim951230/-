@@ -3,7 +3,7 @@
 #include <windows.h>
 #define SIZE_BUFFER 140
 double mas[10];
-
+char masu[20];
 LPSTR lpstrToDword(LPSTR s)
 {
 	double otvet;
@@ -30,10 +30,19 @@ LPSTR lpstrToDword(LPSTR s)
 			str1 = str;
 			return str1;
 		}
+		else
+		{
+			char* str = calloc(100, sizeof(char));
+			char* s = calloc(100, sizeof(char));
+			for (int i = 0; i < 1; i++)
+			{
+				sprintf(s, "%f ", mas[i]);//записываем данные в массив
+				strcat(str, s);
+			}
+			str1 = str;
+			return str1;
+		}
 		
-	
-	
-
 }
 
 int main()
